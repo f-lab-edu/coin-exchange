@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
+
+import com.coin.user.service.UserDto;
 import com.coin.user.service.UserService;
 
 @Service("userService")
@@ -17,14 +19,14 @@ public class UserServiceImpl implements UserService{
 	int maxRetry = 5;
 	
 	@Retryable(maxAttempts = 5, backoff = @Backoff(delay = 1000))
-	public int addUser(String userId, String password, String address, String name, String handPhone) {
+	public int addUser(UserDto user) {
         int rtn = 0;
         CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
         	System.out.println("thread1 시작");
         	
         	int userNumber = 0;
 			try {
-				userNumber = userDao.addUser(userId, password, address, name, handPhone);
+				userNumber = userDao.addUser(user);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

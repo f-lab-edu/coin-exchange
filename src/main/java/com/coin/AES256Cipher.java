@@ -7,7 +7,23 @@ import java.util.Base64;
 
 public class AES256Cipher {
 	
+	private static volatile AES256Cipher INSTANCE;
 	private final static String privateKey = "AES_PRIVATE_KEY_TEST_KEY_32BYTES";
+	static String IV = "";
+	
+	public static AES256Cipher getInstance() {
+		if (INSTANCE == null) {
+            synchronized (AES256Cipher.class) {
+                if (INSTANCE == null)
+                    INSTANCE = new AES256Cipher();
+            }
+        }
+        return INSTANCE;
+	}
+	
+	private AES256Cipher() {
+        IV = privateKey.substring(0, 16);
+    }
 	
 	public static String aesEncode(String str) throws Exception{
 		SecretKeySpec secretKey = new SecretKeySpec(privateKey.getBytes("UTF-8"), "AES");
@@ -21,5 +37,6 @@ public class AES256Cipher {
 
 		return Base64.getEncoder().encodeToString(encrypted);
 	}
+	
 	
 }

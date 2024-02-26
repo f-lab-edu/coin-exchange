@@ -24,7 +24,7 @@ public class UserRunnable implements Runnable {
 	@Override
 	public void run() {
 		try {
-			userDao.addUser(userId, password, address, name, handPhone);
+			//userDao.addUser(userId, password, address, name, handPhone);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

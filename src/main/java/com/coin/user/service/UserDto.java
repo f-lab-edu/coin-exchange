@@ -6,9 +6,18 @@ public class UserDto {
 	private String password;		//비밀번호
 	private String address;			//주소
 	private String name;			//이름
-	private String handphone;		//전화번호	
+	private String handPhone;		//전화번호	
 	private String createTime;		//회원 가입시간
 	private String updateTime;		//회원정보 수정시간
+	
+	public UserDto(String userId, String password, String address, String name, String handPhone) {
+		this.userId = userId;
+		this.password = password;
+		this.address = address;
+		this.name = name;
+		this.handPhone = handPhone;
+	}
+	
 	public String getUserNumber() {
 		return userNumber;
 	}
@@ -39,11 +48,11 @@ public class UserDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getHandphone() {
-		return handphone;
+	public String getHandPhone() {
+		return handPhone;
 	}
-	public void setHandphone(String handphone) {
-		this.handphone = handphone;
+	public void setHandphone(String handPhone) {
+		this.handPhone = handPhone;
 	}
 	public String getCreateTime() {
 		return createTime;
@@ -61,7 +70,7 @@ public class UserDto {
 	@Override
 	public String toString() {
 		return "UserDto [userNumber=" + userNumber + ", userId=" + userId + ", password=" + password + ", address="
-				+ address + ", name=" + name + ", handphone=" + handphone + ", createTime=" + createTime
+				+ address + ", name=" + name + ", handPhone=" + handPhone + ", createTime=" + createTime
 				+ ", updateTime=" + updateTime + "]";
 	}
 }

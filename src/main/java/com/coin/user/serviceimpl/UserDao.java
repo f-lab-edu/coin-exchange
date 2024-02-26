@@ -4,19 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.coin.user.service.UserDto;
+
 @Repository("userDao")
 public class UserDao {
 	
 	@Autowired
     private JdbcTemplate jdbcTemplate;
 	
-	public int addUser(String userId, String password, String address, String name, String handPhone) throws Exception {
+	public int addUser(UserDto user) throws Exception {
 		//String sql = "SELECT * FROM TB_USER";
         //List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
 		Long nextVal = 0L;
         String sql = "INSERT INTO tb_user (USER_NUMBER, USER_ID, PASSWORD, ADDRESS, NAME, HANDPHONE) "
         					+ "VALUES (USER_SEQUENCE.NEXTVAL, ?, 	?,		?,		?,		?)";
-        int rtn = jdbcTemplate.update(sql, userId, password, address, name, handPhone);
+        int rtn = jdbcTemplate.update(sql, user.getUserId(), user.getPassword(), user.getAddress(), user.getName(), user.getHandPhone());
         
         if(rtn == 1) {
         	sql = "SELECT USER_SEQUENCE.CURRVAL FROM DUAL";
