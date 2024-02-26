@@ -31,11 +31,7 @@ public class UserServiceImpl implements UserService{
 			}
 			System.out.println("thread1 종료");
             return userNumber;
-        });
-        
-        rtn= future.join();
-
-        future.thenAccept(result -> {
+        }).thenApply(result -> {
         	try {
         		System.out.println("thread2 시작");
 	        	System.out.println("thread1 결과 회원번호는?" + result);
@@ -47,13 +43,15 @@ public class UserServiceImpl implements UserService{
 					}
 	        	}
 	        	System.out.println("thread2 종료");
+	        	
         	} catch (Exception e) {
         		throw new CompletionException(e);
 			}
+        	return result;
         }).exceptionally(ex -> {
         	for (int i = 0; i < maxRetry; i++) {
                 try {
-                	boolean retry = userDao.addAccount(future.join());
+                	boolean retry = userDao.addAccount(0);
 					if(!retry) {
 						throw new Exception();
 					}
@@ -70,12 +68,5 @@ public class UserServiceImpl implements UserService{
         
 		return rtn;
 	}
-	
-	@Scheduled(cron="0 04 17 * * ?")
-	public void executeBatch() {
-        System.out.println("Batch job is running1...");
-//        AccountBatch ab = new AccountBatch();
-        
-    }
 }
 
