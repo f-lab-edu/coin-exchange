@@ -1,5 +1,5 @@
 package com.coin.user.service;
 
 public interface UserService {
-	int addUser(UserDto user) throws Exception;
+	int addUser(UserDTO userDto);
 }
