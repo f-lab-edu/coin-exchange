@@ -1,4 +1,4 @@
-package com.coin.account.controller;
+package com.coin.controller;
 
 import java.util.HashMap;
 
@@ -7,16 +7,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coin.account.service.AccountDTO;
-import com.coin.account.service.AccountService;
-import com.coin.user.service.UserDTO;
-import com.coin.user.service.UserService;
+import com.coin.service.AccountDTO;
+import com.coin.service.AccountService;
+import com.coin.service.UserDTO;
+import com.coin.service.UserService;
 
 @RestController
 @RequestMapping("/accounts")
@@ -27,20 +28,15 @@ public class AccountController {
 	public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
-	
-	@PostMapping
-	public void addAccount(int userNumber) {
-		accountService.addAccount(new AccountDTO(userNumber));
-	}
-
+	//계좌 상세정보
 	@GetMapping("/{id}")
-	public void selectAccount() {
+	public void selectAccount(@PathVariable int userNumber) {
 	}
-	
+	//계좌 잔액 변경
 	@PutMapping("/{id}")
 	public void updateAccount() {
 	}
-	
+	//계좌정보 삭제
 	@DeleteMapping("/{id}")
 	public void deleteAccount() {
 	}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coin.mapper.AccountMapper">
+
+    <insert id="addAccount" parameterType="Integer">
+        INSERT INTO account 
+        (ACCOUNT, USER_NUMBER) VALUES (
+        (select	
+        		case SUBSTR(REPLACE(account,'-',''), -4) 
+	        		when '9999' then SUBSTR(account, 0,5) || LPAD(SUBSTR(account,6,2)+1,2,0) || '-0001' 
+	        		else SUBSTR(account, 0, 8) || LPAD(SUBSTR(account,9,4)+1,4,0) end 
+	     from account 
+	     where REPLACE(account,'-','') = (select max(REPLACE(account,'-','')) from account))
+	     , #{userNumber}
+	     )
+    </insert>
+    
+    <select id="withoutAccounts" resultType="Integer">
+        SELECT U.USER_NUMBER FROM tb_user U LEFT JOIN account A ON U.USER_NUMBER = A.USER_NUMBER WHERE A.USER_NUMBER IS NULL ORDER BY USER_NUMBER
+    </select>
+    
+    <select id="getBalance" resultType="Integer">
+        SELECT BALANCE FROM account WHERE USER_NUMBER = #{userNumber}
+    </select>
+    
+    <update id="decreaseBalance" parameterType="AccountDTO">
+    	UPDATE account SET BALANCE = BALANCE - #{balance}, UPDATE_TIME = sysdate WHERE USER_NUMBER = #{userNumber} 
+    </update>
+    
+    
+    
+</mapper>

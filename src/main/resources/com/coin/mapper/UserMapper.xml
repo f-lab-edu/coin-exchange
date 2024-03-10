@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coin.mapper.UserMapper">
+
+    <insert id="addUser" parameterType="UserDTO">
+        INSERT INTO tb_user (USER_NUMBER, USER_ID, PASSWORD, ADDRESS, NAME, HANDPHONE) VALUES (USER_SEQUENCE.NEXTVAL, #{userId}, #{password}, #{address},	#{name}, #{handPhone})
+    </insert>
+    
+    <select id="getUserNumber" resultType="Integer">
+        SELECT USER_SEQUENCE.CURRVAL FROM DUAL
+    </select>
+</mapper>

@@ -1,4 +1,4 @@
-package com.coin.account.service;
+package com.coin.service;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -12,8 +12,9 @@ public class AccountDTO {
 	private BigDecimal balance;			//잔액
 	private Timestamp updateTime;		//계좌정보 수정시간
 	
-	public AccountDTO(int userNumber) {
+	public AccountDTO(int userNumber, BigDecimal balance) {
 		this.userNumber = userNumber;
+		this.balance = balance;
 	}
 
 	public String getAccountId() {

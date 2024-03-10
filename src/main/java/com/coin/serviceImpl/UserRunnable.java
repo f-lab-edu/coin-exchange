@@ -1,4 +1,4 @@
-package com.coin.user.serviceimpl;
+package com.coin.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

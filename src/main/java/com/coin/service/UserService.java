@@ -1,4 +1,4 @@
-package com.coin.user.service;
+package com.coin.service;
 
 public interface UserService {
 	int addUser(UserDTO userDto);

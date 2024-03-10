@@ -1,9 +1,10 @@
-package com.coin.account.serviceimpl;
+package com.coin.serviceImpl;
 
 import java.util.concurrent.CompletableFuture;
 import org.springframework.stereotype.Service;
-import com.coin.account.service.AccountDTO;
-import com.coin.account.service.AccountService;
+
+import com.coin.service.AccountDTO;
+import com.coin.service.AccountService;
 
 @Service("accountService")
 public class AccountServiceImpl implements AccountService {
@@ -24,5 +25,8 @@ public class AccountServiceImpl implements AccountService {
 		thread.interrupt();
 	}
 	
+	public int getBalance(int userNumber) {
+		return accountDao.getBalance(userNumber);
+	}
 }
 

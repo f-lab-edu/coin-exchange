@@ -1,4 +1,4 @@
-package com.coin.user.service;
+package com.coin.service;
 
 import java.sql.Timestamp;
 import java.util.Random;
@@ -15,14 +15,13 @@ public class UserDTO {
 	private Timestamp createTime;		//회원 가입시간
 	private Timestamp updateTime;		//회원정보 수정시간
 	
-	private Random random = new Random();
 	
-	public UserDTO() {
-		this.userId = "ksj" + random.nextInt();
-		this.password = AES256Cipher.aesEncode("ksj");
-		this.address = "서울시";
-		this.name = "김승주";
-		this.handPhone = "01012341234";
+	public UserDTO(String userId, String password, String address, String name, String handPhone) {
+		this.userId = userId;
+		this.password = password;
+		this.address = address;
+		this.name = name;
+		this.handPhone = handPhone;
 //		String userId = "ksj" + random.nextInt();
 //		String password = "ksj";
 //		String encodingPassword = aes256.aesEncode(password);
