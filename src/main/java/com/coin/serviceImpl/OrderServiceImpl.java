@@ -79,10 +79,6 @@ public class OrderServiceImpl implements OrderService {
 					}
 					idx = i;
 				}
-				System.out.println("idx->"+idx);
-				System.out.println("getQuantity->"+getQuantity);
-				System.out.println("getSecondQuantity->"+getSecondQuantity);
-				System.out.println("isFulfilled->"+isFulfilled);
 				/*
 				 * 보유코인 테이블에 등록(입력) 시작
 				 * */
