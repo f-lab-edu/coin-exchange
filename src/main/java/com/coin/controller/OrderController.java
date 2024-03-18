@@ -41,7 +41,6 @@ public class OrderController {
 	
 	//거래 상세정보
 	@GetMapping("/{id}")
-	//retrieve
 	public void retrieveOrder(@PathVariable int userNumber) {
 	}
 	//거래 내용 변경

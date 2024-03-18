@@ -139,10 +139,10 @@ public class OrderService {
 		
 		
 		// 수량 총 합을 계산하기위한 변수
-		AtomicInteger getQuantity = new AtomicInteger(0);
+		AtomicInteger quantity = new AtomicInteger(0);
 		
 		int breakIndex = IntStream.range(0, orders.size())
-				.takeWhile(i -> getQuantity.addAndGet(orders.get(i).getTranQuantity()) < orderDto.getTranQuantity()) //false면 그만둔다
+				.takeWhile(i -> quantity.addAndGet(orders.get(i).getTranQuantity()) < orderDto.getTranQuantity()) //false면 그만둔다
 				.reduce((a, b) -> b)
 				.orElse(orders.size() - 1);
 		
@@ -156,7 +156,7 @@ public class OrderService {
 //			idx = i;
 //		}
 //		
-		rv.setGetQuantity(getQuantity.get());
+		rv.setGetQuantity(quantity.get());
 		//주문이 존재하지 않다면 0 / 수량의 총합이 부족하면 breakIndex / 수량의 총합을 충족하면 breakIndex +1(takeWhile에서 false인 경우에 빠져나와서 +1을 해준다)
 		rv.setBreakIndex(orders.size() == 0 ? 0 : breakIndex == orders.size() -1 ? breakIndex : breakIndex+1);
 		
@@ -179,15 +179,15 @@ public class OrderService {
 			orderMapper.updateOrder(param.getOrders().get(0));
 		}
 		else {
-			int[] getSecondQuantity = {0};
+			int[] secondQuantity = {0};
 			
 			// 주문 테이블에 수량이 많은 경우(주문자가 많은 경우)
 			IntStream.rangeClosed(0, param.getBreakIndex())
 					.forEach(i -> {
 				        if (i == param.getBreakIndex() && param.getQuantity() >= param.getOrderDto().getTranQuantity()) {
-							param.getOrders().get(i).setTranQuantity(param.getOrderDto().getTranQuantity() - getSecondQuantity[0]);
+							param.getOrders().get(i).setTranQuantity(param.getOrderDto().getTranQuantity() - secondQuantity[0]);
 						}
-						getSecondQuantity[0] += param.getOrders().get(i).getTranQuantity();
+						secondQuantity[0] += param.getOrders().get(i).getTranQuantity();
 						
 						orderMapper.updateOrder(param.getOrders().get(i));
 					});
