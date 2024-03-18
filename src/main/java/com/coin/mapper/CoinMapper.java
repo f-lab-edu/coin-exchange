@@ -7,5 +7,5 @@ import com.coin.dto.HoldCoinDTO;
 @Mapper
 public interface CoinMapper {
 	
-	int addHoldCoin(HoldCoinDTO holdCoinDto);
+	int insertHoldCoin(HoldCoinDTO holdCoinDto);
 }

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.coin.mapper.CoinMapper">
 
-	<insert id="addHoldCoin" parameterType="HoldCoinDTO">
+	<insert id="insertHoldCoin" parameterType="HoldCoinDTO">
 		INSERT INTO holdcoin (HOLDCOIN_SEQ, USER_NUMBER, COIN_CODE, COIN_QUANTITY) values (HOLDCOIN_SEQUENCE.NEXTVAL, #{userNumber}, #{coinCode}, #{coinQuantity})
     </insert> 
     

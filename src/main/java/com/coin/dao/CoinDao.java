@@ -13,16 +13,14 @@ import com.coin.dto.OrderDTO;
 @Repository("coinDao")
 public class CoinDao {
 	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-	
 	private CoinMapper coinMapper;
 	
 	public CoinDao(CoinMapper coinMapper) {
 		this.coinMapper = coinMapper;
 	}
 	
-	public int addHoldCoin(HoldCoinDTO holdCoinDto)  {
-		return coinMapper.addHoldCoin(holdCoinDto);
+	public int insertHoldCoin(HoldCoinDTO holdCoinDto)  {
+		return coinMapper.insertHoldCoin(holdCoinDto);
 	}
 }
 

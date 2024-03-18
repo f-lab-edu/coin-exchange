@@ -8,12 +8,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.coin.service.OrderService;
 import com.coin.ResultVO;
+import com.coin.dao.AccountRunnable;
+import com.coin.dao.OrderRunnable;
 import com.coin.dto.AccountDTO;
 import com.coin.dto.HoldCoinDTO;
 import com.coin.dto.OrderDTO;
@@ -27,6 +30,7 @@ import com.coin.mapper.TradeHistoryMapper;
 import lombok.extern.slf4j.Slf4j;
 import static java.util.stream.Collectors.reducing;
 
+@EnableTransactionManagement
 @Service("OrderService")
 @Slf4j
 public class OrderService {
@@ -48,10 +52,10 @@ public class OrderService {
 	// (매도면 구분이 매수인 종목만 확인)(orderService.getOrder(userNumber, coinCode, buySellCode))
 	// 있으면 거래 진행-> 보유코인 테이블에 입력, 거래이력 테이블에 입력, 계좌 테이블(잔액) 수정(내거와 상대방거), 주문테이블(해당 코인) 삭제
 	// 없으면-> 주문테이블에 입력, 계좌 테이블(잔액) 수정
-	@Transactional(propagation = Propagation.REQUIRED, noRollbackFor = SQLException.class)
+	@Transactional()
 	public int addOrder(OrderDTO orderDto) {
 		//계좌 금액 확인
-		if(validateAmount(orderDto) == 0) {
+		if(!validateAmount(orderDto)) {
 			return 0;
 		}
 		
@@ -88,24 +92,24 @@ public class OrderService {
 		/*--------------------Transaction 2*/
 		//4거래이력 테이블에 입력
 //		try {
-			insertTranLog(orderDto);		
+			insertTradeHistory(orderDto);
 //		} catch (Exception e) {
 //			log.error("거래 로그 입력 에러", e.getMessage());
 //		}
 		return 1;
 	}
 	
-	public int validateAmount(OrderDTO orderDto) {
+	public boolean validateAmount(OrderDTO orderDto) {
 		// 계좌의 잔액 조회
-		int getBalance = accountMapper.getBalance(orderDto.getUserNumber());
+		int balance = accountMapper.getBalance(orderDto.getUserNumber());
 		// 입력한 수량과 금액의 합
 		BigDecimal orderBalance = orderDto.calculateTotalTransactionAmount();
 
 		// 잔액이 입력한 수량과 금액의 합보다 작으면 종료
-		if (getBalance < orderBalance.intValue()) {
-			return 0;
+		if (balance < orderBalance.intValue()) {
+			return false;
 		}
-		return getBalance;
+		return true;
 	}
 	
 	public void insertOrder(OrderDTO orderDto) {
@@ -160,7 +164,7 @@ public class OrderService {
 	}
 	
 	public void insertHoldCoin(ParameterDTO param) {
-		coinMapper.addHoldCoin(HoldCoinDTO.builder()
+		coinMapper.insertHoldCoin(HoldCoinDTO.builder()
 				.userNumber(param.getOrderDto().getUserNumber())
 				.coinCode(param.getOrderDto().getCoinCode())
 				.coinQuantity(param.getBreakIndex() != 0 && param.getBreakIndex() == param.getOrders().size()-1 ? param.getOrderDto().getTranQuantity() : param.getQuantity()) //idx == orders.size()-1 => for문을 다 돌았는데 수량이 충족하지 못했다.
@@ -236,19 +240,17 @@ public class OrderService {
 //			accountMapper.updateBalance(param.getAccountDto());
 //		}
 		
-		
-		
-		
 	}
+	
 //	@Transactional(propagation = Propagation.NESTED, noRollbackFor = SQLException.class)
-	@Transactional(propagation = Propagation.REQUIRES_NEW, noRollbackFor = SQLException.class)
-	public void insertTranLog(OrderDTO orderDto) {
-		tradeHistoryMapper.insertTradeHistory(TradeHistoryDTO.builder()
-											.userNumber(orderDto.getUserNumber())
-											.coinCode(orderDto.getCoinCode())
-											.tranAmount(orderDto.getTranAmount())
-											.buySellCode(orderDto.getBuySellCode())
-											.build());
+//	@Transactional(propagation = Propagation.REQUIRES_NEW, noRollbackFor = SQLException.class)
+	public void insertTradeHistory(OrderDTO orderDto) {
+		
+		OrderRunnable orderRunnable = new OrderRunnable(tradeHistoryMapper, orderDto); 
+		Thread thread = new Thread(orderRunnable);
+		thread.start();
+		
+		thread.interrupt();
 	}
 	
 	
