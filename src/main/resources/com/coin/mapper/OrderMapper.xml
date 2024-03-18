@@ -3,18 +3,16 @@
 
 <mapper namespace="com.coin.mapper.OrderMapper">
 
-	<insert id="addTran" parameterType="OrderDTO">
-        INSERT INTO tranlog (TRAN_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_QUANTITY, TRAN_AMOUNT) VALUES (TRAN_SEQUENCE.NEXTVAL, #{userNumber}, #{coinCode}, #{buySellCode}, #{tranQuantity}, #{tranAmount})
-    </insert>
-    <insert id="addOrder" parameterType="OrderDTO">
+    <insert id="insertOrder" parameterType="OrderDTO">
         INSERT INTO tranorder (ORDER_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_QUANTITY, TRAN_AMOUNT) VALUES (ORDER_SEQUENCE.NEXTVAL, #{userNumber}, #{coinCode}, #{buySellCode}, #{tranQuantity}, #{tranAmount})
     </insert>
     
-    <select id="getOrder" resultMap="orderResultMap"> <!-- resultType="OrderDTO" -->
-        SELECT ORDER_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_QUANTITY, TRAN_AMOUNT, TO_CHAR(TRAN_END_YN), TRAN_TIME  FROM tranorder WHERE USER_NUMBER != #{userNumber} AND TRAN_AMOUNT = #{tranAmount} AND COIN_CODE = #{coinCode} AND BS_CODE != #{buySellCode} AND TRAN_END_YN = 'N' order by TRAN_TIME
+    <select id="findByUserNumberAndTranAmountAndCoinCodeAndBuySellCode" resultMap="orderResultMap"> <!-- resultType="OrderDTO" -->
+        SELECT ORDER_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_QUANTITY, TRAN_AMOUNT, TO_CHAR(TRAN_END_YN), TRAN_TIME  FROM tranorder 
+        WHERE USER_NUMBER != #{userNumber} AND TRAN_AMOUNT = #{tranAmount} AND COIN_CODE = #{coinCode} AND BS_CODE != #{buySellCode} AND TRAN_END_YN = 'N' order by TRAN_TIME
     </select>
     
-    <resultMap id="orderResultMap" type="com.coin.service.OrderDTO">
+    <resultMap id="orderResultMap" type="com.coin.dto.OrderDTO">
         <result property="orderSeq" column="ORDER_SEQ"/>
         <result property="userNumber" column="USER_NUMBER"/>
         <result property="coinCode" column="COIN_CODE"/>
@@ -26,10 +24,11 @@
     </resultMap>
     
     <update id="deleteOrder" parameterType="OrderDTO">
-        UPDATE tranorder SET TRAN_END_YN = 'Y', TRAN_TIME = sysdate WHERE USER_NUMBER = #{userNumber}  AND COIN_CODE = #{coinCode} AND BS_CODE = #{buySellCode} AND TRAN_QUANTITY = #{tranQuantity} AND TRAN_AMOUNT = #{tranAmount}
+        UPDATE tranorder SET TRAN_END_YN = 'Y', TRAN_TIME = sysdate, TRAN_QUANTITY = 0 WHERE USER_NUMBER = #{userNumber}  AND COIN_CODE = #{coinCode} AND BS_CODE = #{buySellCode} AND TRAN_QUANTITY = #{tranQuantity} AND TRAN_AMOUNT = #{tranAmount} AND ORDER_SEQ = #{orderSeq}
     </update>
     
     <update id="updateOrder" parameterType="OrderDTO">
-        UPDATE tranorder SET TRAN_QUANTITY = TRAN_QUANTITY - #{tranQuantity}, TRAN_TIME = sysdate WHERE USER_NUMBER = #{userNumber}  AND COIN_CODE = #{coinCode} AND BS_CODE = #{buySellCode} AND TRAN_AMOUNT = #{tranAmount} AND TRAN_END_YN = 'N'
+        UPDATE tranorder SET TRAN_QUANTITY = TRAN_QUANTITY - #{tranQuantity}, TRAN_END_YN = case when TRAN_QUANTITY - #{tranQuantity} = 0 then 'Y' else TRAN_END_YN end, TRAN_TIME = sysdate 
+        WHERE USER_NUMBER = #{userNumber}  AND COIN_CODE = #{coinCode} AND BS_CODE = #{buySellCode} AND TRAN_AMOUNT = #{tranAmount} AND TRAN_END_YN = 'N' AND ORDER_SEQ = #{orderSeq}
     </update>
 </mapper>

@@ -1,17 +1,18 @@
-package com.coin.serviceImpl;
+package com.coin.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.coin.mapper.AccountMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class AccountRunnable implements Runnable {
 	
-	private AccountDao accountDao;
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	private AccountMapper accountMapper;
 	private final int maxRetry = 5;
 	private int userNumber;
 	
-	public AccountRunnable(AccountDao accountDao, int userNumber) {
-		this.accountDao = accountDao;
+	public AccountRunnable(AccountMapper accountMapper, int userNumber) {
+		this.accountMapper = accountMapper;
 		this.userNumber = userNumber;
 	}
 	
@@ -20,13 +21,13 @@ public class AccountRunnable implements Runnable {
 		
 		boolean retry = false;
 		try {
-			retry = accountDao.addAccount(userNumber);
+			retry = accountMapper.addAccount(userNumber) == 1 ? true : false;
 		} catch (Exception e) {
 			log.error("addAccount exception error", e.getStackTrace()[0]);
 		}
 		if(!retry) {
 			for (int i = 0; i < maxRetry; i++) {
-	        	retry = accountDao.addAccount(userNumber);
+	        	retry = accountMapper.addAccount(userNumber) == 1 ? true : false;
 				if(retry) {
 					break;
 				}

@@ -3,10 +3,11 @@
 <configuration>
 
 	<typeAliases>
-	    <typeAlias type="com.coin.service.UserDTO" alias="UserDTO"/>
-	    <typeAlias type="com.coin.service.AccountDTO" alias="AccountDTO"/>
-	    <typeAlias type="com.coin.service.OrderDTO" alias="OrderDTO"/>
-	    <typeAlias type="com.coin.service.HoldCoinDTO" alias="HoldCoinDTO"/>
+	    <typeAlias type="com.coin.dto.UserDTO" alias="UserDTO"/>
+	    <typeAlias type="com.coin.dto.AccountDTO" alias="AccountDTO"/>
+	    <typeAlias type="com.coin.dto.OrderDTO" alias="OrderDTO"/>
+	    <typeAlias type="com.coin.dto.HoldCoinDTO" alias="HoldCoinDTO"/>
+	    <typeAlias type="com.coin.dto.TradeHistoryDTO" alias="TradeHistoryDTO"/>
 	</typeAliases>
 	
     <mappers>
@@ -14,6 +15,7 @@
         <mapper resource="com/coin/mapper/AccountMapper.xml"/>
         <mapper resource="com/coin/mapper/OrderMapper.xml"/>
         <mapper resource="com/coin/mapper/CoinMapper.xml"/>
+        <mapper resource="com/coin/mapper/TradeHistoryMapper.xml"/>
     </mappers>
     
 </configuration>

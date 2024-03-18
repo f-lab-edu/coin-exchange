@@ -1,18 +1,13 @@
-package com.coin.serviceImpl;
+package com.coin.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-
 import com.coin.mapper.AccountMapper;
-import com.coin.mapper.UserMapper;
-import com.coin.service.AccountDTO;
-import com.coin.service.OrderDTO;
+import com.coin.dto.AccountDTO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository("accountDao")
 public class AccountDao {
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	private AccountMapper accountMapper;
 	
@@ -23,6 +18,7 @@ public class AccountDao {
 	public boolean addAccount(int userNumber)  {
 		try {
 			Thread.sleep(5000); //5초 대기
+			//insertAccount
 			return accountMapper.addAccount(userNumber) == 1? true: false;
 		} catch (InterruptedException e) {
 			log.error("Thread sleep error");
@@ -31,11 +27,13 @@ public class AccountDao {
 	}
 	
 	public int getBalance(int userNumber) {
+		//findByUserNumber
 		return accountMapper.getBalance(userNumber);
 	}
 	
-	public int decreaseBalance(AccountDTO accountDto)  {
-		return accountMapper.decreaseBalance(accountDto);
+	public int updateBalance(AccountDTO accountDto)  {
+		return accountMapper.updateBalance(accountDto);
 	}
+	
 }
 

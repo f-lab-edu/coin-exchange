@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.coin.AES256Cipher;
 import com.coin.ResultVO;
-import com.coin.service.UserBuilder;
-import com.coin.service.UserDTO;
+import com.coin.dto.UserDTO;
 import com.coin.service.UserService;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -78,14 +76,12 @@ public class UserController {
 		name = "김승주";
 		handPhone = "01012345678";
 		
-		UserDTO userDTO = new UserBuilder()
+		return UserDTO.builder()
 				.userId(userId)
 				.password(password)
 				.address(address)
 				.name(name)
 				.handPhone(handPhone)
 				.build();
-		
-		return userDTO;
 	}
 }

@@ -24,10 +24,8 @@
         SELECT BALANCE FROM account WHERE USER_NUMBER = #{userNumber}
     </select>
     
-    <update id="decreaseBalance" parameterType="AccountDTO">
+    <update id="updateBalance" parameterType="AccountDTO">
     	UPDATE account SET BALANCE = BALANCE - #{balance}, UPDATE_TIME = sysdate WHERE USER_NUMBER = #{userNumber} 
     </update>
-    
-    
     
 </mapper>

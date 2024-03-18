@@ -1,11 +1,9 @@
-package com.coin.serviceImpl;
+package com.coin.dao;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import com.coin.mapper.OrderMapper;
-import com.coin.service.OrderDTO;
+import com.coin.dto.OrderDTO;
 
 @Repository("orderDao")
 public class OrderDao {
@@ -16,13 +14,12 @@ public class OrderDao {
 		this.orderMapper = orderMapper;
 	}
 	
-	public int addOrder(OrderDTO orderDto)  {
-		orderMapper.addTran(orderDto);
-		return orderMapper.addOrder(orderDto);
+	public int insertOrder(OrderDTO orderDto)  {
+		return orderMapper.insertOrder(orderDto);
 	}
 	
-	public List<OrderDTO> getOrder(OrderDTO orderDto)  {
-		List<OrderDTO> getOrder = orderMapper.getOrder(orderDto);
+	public List<OrderDTO> findByUserNumberAndTranAmountAndCoinCodeAndBuySellCode(OrderDTO orderDto)  {
+		List<OrderDTO> getOrder = orderMapper.findByUserNumberAndTranAmountAndCoinCodeAndBuySellCode(orderDto);
 		return getOrder.size() == 0 ? null : getOrder;
 	}
 	

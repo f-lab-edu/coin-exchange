@@ -1,9 +1,9 @@
-package com.coin.serviceImpl;
+package com.coin.dao;
 
 import org.springframework.stereotype.Repository;
 
 import com.coin.mapper.UserMapper;
-import com.coin.service.UserDTO;
+import com.coin.dto.UserDTO;
 
 @Repository("userDao")
 public class UserDao {

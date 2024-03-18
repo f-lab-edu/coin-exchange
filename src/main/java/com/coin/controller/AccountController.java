@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.coin.service.AccountDTO;
+import com.coin.dto.AccountDTO;
 import com.coin.service.AccountService;
-import com.coin.service.UserDTO;
+import com.coin.dto.UserDTO;
 import com.coin.service.UserService;
 
 @RestController

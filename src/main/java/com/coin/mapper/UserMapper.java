@@ -2,7 +2,7 @@ package com.coin.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.coin.service.UserDTO;
+import com.coin.dto.UserDTO;
 
 @Mapper
 public interface UserMapper {

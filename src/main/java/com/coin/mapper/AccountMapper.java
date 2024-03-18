@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
-import com.coin.service.AccountDTO;
+import com.coin.dto.AccountDTO;
 
 @Mapper
 public interface AccountMapper {
@@ -15,5 +15,6 @@ public interface AccountMapper {
 	
 	int getBalance(int userNumber);
 	
-	int decreaseBalance(AccountDTO accountDto);
+	int updateBalance(AccountDTO accountDto);
+	
 }
