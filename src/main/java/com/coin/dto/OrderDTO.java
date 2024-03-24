@@ -11,7 +11,7 @@ public class OrderDTO {
 	
 	private int orderSeq;				//주문 일련번호
 	private int userNumber;				//회원 번호
-	private String coinCode;				//코인 코드
+	private String coinCode;			//코인 코드
 	private String buySellCode;			//매수 매도 구분 코드
 	private int tranQuantity;			//거래 수량
 	private BigDecimal tranAmount;		//거래 금액

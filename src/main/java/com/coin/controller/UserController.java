@@ -34,9 +34,6 @@ public class UserController {
 		
 		int addResult = userService.addUser(userDTO);
 		
-		result.setMsg(addResult != 0 ? "success" : "fail");
-		result.setResult(addResult);
-
 		return result;
 	}
 	

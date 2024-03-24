@@ -4,7 +4,7 @@
 <mapper namespace="com.coin.mapper.TradeHistoryMapper">
 
     <insert id="insertTradeHistory" parameterType="TradeHistoryDTO">
-        INSERT INTO tradehistory (TRADE_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_AMOUNT) VALUES (TRADE_SEQUENCE.NEXTVAL, 'A', #{coinCode}, #{buySellCode}, #{tranAmount})
+        INSERT INTO tradehistory (TRADE_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_AMOUNT) VALUES (TRADE_SEQUENCE.NEXTVAL, #{userNumber}, #{coinCode}, #{buySellCode}, #{tranAmount})
     </insert>
     
 </mapper>

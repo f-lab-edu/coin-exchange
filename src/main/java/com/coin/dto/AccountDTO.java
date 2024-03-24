@@ -20,9 +20,12 @@ public class AccountDTO {
 	private BigDecimal balance;			//잔액
 	private Timestamp updateTime;		//계좌정보 수정시간
 	
+	private int breakIndex;
+	
 	@Builder
-	public AccountDTO(int userNumber, BigDecimal balance) {
+	public AccountDTO(int userNumber, BigDecimal balance, int breakIndex) {
 		this.userNumber = userNumber;
 		this.balance = balance;
+		this.breakIndex = breakIndex;
 	}
 }
