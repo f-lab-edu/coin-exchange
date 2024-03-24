@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coin.mapper.TradeHistoryMapper">
+
+    <insert id="insertTradeHistory" parameterType="TradeHistoryDTO">
+        INSERT INTO tradehistory (TRADE_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_AMOUNT) VALUES (TRADE_SEQUENCE.NEXTVAL, #{userNumber}, #{coinCode}, #{buySellCode}, #{tranAmount})
+    </insert>
+    
+</mapper>

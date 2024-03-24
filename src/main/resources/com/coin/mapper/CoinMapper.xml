@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coin.mapper.CoinMapper">
+
+	<insert id="insertHoldCoin" parameterType="HoldCoinDTO">
+		INSERT INTO holdcoin (HOLDCOIN_SEQ, USER_NUMBER, COIN_CODE, COIN_QUANTITY) values (HOLDCOIN_SEQUENCE.NEXTVAL, #{userNumber}, #{coinCode}, #{coinQuantity})
+    </insert> 
+    
+</mapper>

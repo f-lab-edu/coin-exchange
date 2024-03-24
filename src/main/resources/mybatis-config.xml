@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
-	<!-- Mybatis 관련 설정 작성하기 * 아래 순서 중요, 바뀌면 안됨! -->
+
+	<typeAliases>
+	    <typeAlias type="com.coin.dto.UserDTO" alias="UserDTO"/>
+	    <typeAlias type="com.coin.dto.AccountDTO" alias="AccountDTO"/>
+	    <typeAlias type="com.coin.dto.OrderDTO" alias="OrderDTO"/>
+	    <typeAlias type="com.coin.dto.HoldCoinDTO" alias="HoldCoinDTO"/>
+	    <typeAlias type="com.coin.dto.TradeHistoryDTO" alias="TradeHistoryDTO"/>
+	</typeAliases>
 	
-	<environments default="development">
-        <environment id="development">
-            <transactionManager type="JDBC"/>
-            <dataSource type="POOLED">
-                <property name="driver" value="oracle.jdbc.OracleDriver"/>
-                <property name="url" value="oracle:thin:@localhost:1521/orcl"/>
-                <property name="username" value="coindb"/>
-                <property name="password" value="test1234"/>
-            </dataSource>
-        </environment>
-    </environments>
+    <mappers>
+        <mapper resource="com/coin/mapper/UserMapper.xml"/>
+        <mapper resource="com/coin/mapper/AccountMapper.xml"/>
+        <mapper resource="com/coin/mapper/OrderMapper.xml"/>
+        <mapper resource="com/coin/mapper/CoinMapper.xml"/>
+        <mapper resource="com/coin/mapper/TradeHistoryMapper.xml"/>
+    </mappers>
     
 </configuration>
