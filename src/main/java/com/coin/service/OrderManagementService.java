@@ -4,13 +4,18 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import com.coin.service.OrderManagementService;
 import com.coin.ResultVO;
 import com.coin.CustomErrorCode;
-import com.coin.CustomException;
 import com.coin.dto.OrderDTO;
+import com.coin.exception.CustomException;
+import com.coin.response.ApiResponse;
 
 @Service("OrderManagementService")
 public class OrderManagementService {
@@ -34,27 +39,27 @@ public class OrderManagementService {
   // 있으면 거래 진행-> 보유코인 테이블에 입력, 거래이력 테이블에 입력, 계좌 테이블(잔액) 수정(내거와 상대방거), 주문테이블(해당 코인)
   // 삭제
   // 없으면-> 주문테이블에 입력, 계좌 테이블(잔액) 수정
-  @Transactional
-  public int addOrder(OrderDTO orderDto) {
-
-    // 계좌 금액 확인
-    if (orderDto.getBuySellCode().equals("01") && !validateAmount(orderDto)) {
-      throw new CustomException(CustomErrorCode.INSUFFICIENT_BALANCE);
+  @Transactional//(isolation = Isolation.SERIALIZABLE)
+  public ApiResponse<String> addOrder(OrderDTO orderDto) {
+    // 계좌 금액 확인 StringUtils
+    if (StringUtils.equals(orderDto.getBuySellCode(),"01") && !validateAmount(orderDto)) {
+      throw new CustomException("잔액이 부족합니다");
     }
     
     List<OrderDTO> orders =
         orderService.findByUserNumberAndTranAmountAndCoinCodeAndBuySellCode(orderDto);
 
-    // 수량이 존재하지 않으면 주문 테이블에 입력 // 배치로 오후 4시에 주문테이블을 비운다(개발 예정)
+    // 수량이 존재하지 않으면 주문 테이블에 입력 // 배치로 오후 4시에 주문테이블을 비운다(개발 예정) 비울때 매수 주문을 한 유저의 경우에는 계좌에 금액을 돌려준다
     if (orders.size() == 0) {
       // 주문 테이블에 입력과 잔액 차감
       orderService.insert(orderDto);
       // 매수인 경우에만 차감
-      if (orderDto.getBuySellCode().equals("01")) {
+      if (StringUtils.equals(orderDto.getBuySellCode(),"01")) {
         // 계좌에 잔액 차감
         accountService.updateBalance(accountService.accountBuilder(orderDto, 0));
       }
-      return 1;
+//      return new ResponseEntity<>("주문을 입력하였습니다", HttpStatus.OK);
+      return ApiResponse.ok("주문을 입력하였습니다");
     }
 
     // 수량이 존재하면 거래 진행-> 1보유코인 테이블에 등록(입력), 2주문테이블(해당 코인) 삭제, 3계좌 테이블(잔액) 수정(내거와
@@ -66,7 +71,7 @@ public class OrderManagementService {
         rv.getCalculateQuantity(), orders)); //holdCoinDto
 
     // 2주문테이블(해당 코인) 삭제
-    orderService.update(orderDto, rv.getBreakIndex(), rv.getCalculateQuantity(), orders);// orderDto
+    orderService.update(orderDto, rv.getBreakIndex(), rv.getCalculateQuantity(), orders);// orderDto 
 
     // 3상대방과 나의 계좌에서 잔액을 변경
     accountService.updateBalance(accountService.accountBuilder(orderDto, rv.getBreakIndex()), orders);// accountDto
@@ -75,7 +80,8 @@ public class OrderManagementService {
     // 4거래이력 테이블에 입력
     tradeHistoryService.insert(tradeHistoryService.tradeHistoryBuilder(orderDto)); //tradeHistoryDto
 
-    return 2;
+//    return new ResponseEntity<>("거래가 정상적으로 종료되었습니다", HttpStatus.OK);
+    return ApiResponse.ok("거래가 정상적으로 종료되었습니다");
   }
 
   public boolean validateAmount(OrderDTO orderDto) {

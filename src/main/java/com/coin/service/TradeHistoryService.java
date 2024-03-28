@@ -31,7 +31,7 @@ public class TradeHistoryService {
       if(thread.isAlive())
         thread.interrupt();
     } catch (InterruptedException e) {
-      e.printStackTrace();
+//      e.printStackTrace();
     }
   }
 

@@ -9,7 +9,7 @@
     
     <select id="findByUserNumberAndTranAmountAndCoinCodeAndBuySellCode" resultMap="orderResultMap"> <!-- resultType="OrderDTO" -->
         SELECT ORDER_SEQ, USER_NUMBER, COIN_CODE, BS_CODE, TRAN_QUANTITY, TRAN_AMOUNT, TO_CHAR(TRAN_END_YN), TRAN_TIME  FROM tranorder 
-        WHERE USER_NUMBER != #{userNumber} AND TRAN_AMOUNT = #{tranAmount} AND COIN_CODE = #{coinCode} AND BS_CODE != #{buySellCode} AND TRAN_END_YN = 'N' order by TRAN_TIME
+        WHERE USER_NUMBER != #{userNumber} AND TRAN_AMOUNT = #{tranAmount} AND COIN_CODE = #{coinCode} AND BS_CODE != #{buySellCode} AND TRAN_END_YN = 'N' order by TRAN_TIME FOR UPDATE
     </select>
     
     <resultMap id="orderResultMap" type="com.coin.dto.OrderDTO">
