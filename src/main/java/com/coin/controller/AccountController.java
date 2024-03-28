@@ -30,7 +30,7 @@ public class AccountController {
     }
 	//계좌 상세정보
 	@GetMapping("/{id}")
-	public void selectAccount(@PathVariable int userNumber) {
+	public void retrieveAccount(@PathVariable int userNumber) {
 	}
 	//계좌 잔액 변경
 	@PutMapping("/{id}")
